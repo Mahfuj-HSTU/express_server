@@ -4,9 +4,8 @@ import { userServices } from './user.service'
 
 // * create user
 const createUser = async (req: Request, res: Response) => {
-  const { name, email, age } = req.body
   try {
-    const result = await userServices.createUserIntoDb(name, email, age)
+    const result = await userServices.createUserIntoDb(req.body)
     res.send({
       success: true,
       message: 'User created successfully',
