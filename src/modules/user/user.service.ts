@@ -24,16 +24,17 @@ const updateUserIntoDb = async (
   email: string,
   age: number
 ) => {
-  const result = await pool.query(
+  const updateUser = await pool.query(
     `UPDATE users SET name = $1, email = $2, age = $3 WHERE id = $4`,
     [name, email, age, id]
   )
-  return result
+  return updateUser
 }
 
 const deleteUserFromDb = async (id: number) => {
-  const result = await pool.query(`DELETE FROM users WHERE id = $1`, [id])
-  return result
+  const deleteUser = await pool.query(`DELETE FROM users WHERE id = $1`, [id])
+
+  return deleteUser
 }
 
 export const userServices = {

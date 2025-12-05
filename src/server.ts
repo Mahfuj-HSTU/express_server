@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express'
 import { initDb, pool } from './config/db'
 import logger from './middleware/logger'
 import { userRoutes } from './modules/user/user.routes'
+import { todoRoutes } from './modules/todo/todo.routes'
 const app = express()
 const port = config.port
 
@@ -18,28 +19,7 @@ app.get('/', logger, (req: Request, res: Response) => {
 })
 
 app.use('/users', userRoutes)
-
-// *post todos
-app.post('/todos', async (req: Request, res: Response) => {
-  const { user_id, title, description, is_completed, due_date } = req.body
-  try {
-    const result = await pool.query(
-      `INSERT INTO todos (user_id, title, description, is_completed, due_date) VALUES ($1, $2, $3, $4, $5)`,
-      [user_id, title, description, is_completed, due_date]
-    )
-    res.send({
-      success: true,
-      message: 'Todo created successfully',
-      data: result.rows[0]
-    })
-  } catch (error: any) {
-    res.status(500).send({
-      success: false,
-      message: 'Failed to create todo',
-      error: error.message
-    })
-  }
-})
+app.use('/todos', todoRoutes)
 
 // *get todos
 app.get('/todos', async (req: Request, res: Response) => {
