@@ -3,15 +3,8 @@ import { pool } from '../../config/db'
 import { todoServices } from './todo.service'
 
 const createTodo = async (req: Request, res: Response) => {
-  const { user_id, title, description, is_completed, due_date } = req.body
   try {
-    const result = await todoServices.createTodoIntoDb(
-      user_id,
-      title,
-      description,
-      is_completed,
-      due_date
-    )
+    const result = await todoServices.createTodoIntoDb(req.body)
 
     // Handle "user not found"
     if ('success' in result) {

@@ -1,12 +1,8 @@
 import { pool } from '../../config/db'
 
-const createTodoIntoDb = async (
-  user_id: number,
-  title: string,
-  description: string,
-  is_completed: boolean,
-  due_date: string
-) => {
+const createTodoIntoDb = async (payload: Record<string, unknown>) => {
+  const { user_id, title, description, is_completed, due_date } = payload
+
   const isUserExist = await pool.query(`SELECT * FROM users WHERE id = $1`, [
     user_id
   ])

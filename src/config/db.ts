@@ -12,12 +12,14 @@ export const initDb = async () => {
       id SERIAL PRIMARY KEY,
       name VARCHAR(100) NOT NULL,
       email VARCHAR(100) UNIQUE NOT NULL,
+      password TEXT NOT NULL,
       age INT NOT NULL,
       phone VARCHAR(15),
       address TEXT,
       created_at TIMESTAMP DEFAULT NOW(),
       updated_at TIMESTAMP DEFAULT NOW()
     )`)
+
     await pool.query(`CREATE TABLE IF NOT EXISTS todos (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
