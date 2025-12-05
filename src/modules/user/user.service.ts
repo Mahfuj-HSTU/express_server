@@ -8,6 +8,38 @@ const createUserIntoDb = async (name: string, email: string, age: number) => {
   return result
 }
 
+const getAllUsersFromDb = async () => {
+  const result = await pool.query(`SELECT * FROM users`)
+  return result
+}
+
+const getUserByIdFromDb = async (id: number) => {
+  const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [id])
+  return result
+}
+
+const updateUserIntoDb = async (
+  id: number,
+  name: string,
+  email: string,
+  age: number
+) => {
+  const result = await pool.query(
+    `UPDATE users SET name = $1, email = $2, age = $3 WHERE id = $4`,
+    [name, email, age, id]
+  )
+  return result
+}
+
+const deleteUserFromDb = async (id: number) => {
+  const result = await pool.query(`DELETE FROM users WHERE id = $1`, [id])
+  return result
+}
+
 export const userServices = {
-  createUserIntoDb
+  createUserIntoDb,
+  getAllUsersFromDb,
+  getUserByIdFromDb,
+  updateUserIntoDb,
+  deleteUserFromDb
 }
