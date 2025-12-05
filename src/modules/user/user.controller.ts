@@ -96,6 +96,9 @@ const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params
   try {
     const result = await userServices.deleteUserFromDb(id as unknown as number)
+    if ('success' in result) {
+      return res.status(404).send(result)
+    }
     res.send({
       success: true,
       message: 'User deleted successfully',

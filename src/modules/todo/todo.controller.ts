@@ -110,6 +110,9 @@ const deleteTodo = async (req: Request, res: Response) => {
   const { id } = req.params
   try {
     const result = await todoServices.deleteTodoFromDb(id as unknown as number)
+    if ('success' in result) {
+      return res.status(404).send(result)
+    }
     res.send({
       success: true,
       message: 'Todo deleted successfully',

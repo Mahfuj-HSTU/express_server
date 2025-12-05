@@ -62,6 +62,13 @@ const updateTodoIntoDb = async (
 
 const deleteTodoFromDb = async (id: number) => {
   const result = await pool.query(`DELETE FROM todos WHERE id = $1`, [id])
+  if (result.rowCount === 0) {
+    return {
+      success: false,
+      message: 'Todo not found',
+      error: 'Todo not found'
+    }
+  }
   return result
 }
 

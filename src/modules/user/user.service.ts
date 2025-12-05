@@ -33,7 +33,17 @@ const updateUserIntoDb = async (
 
 const deleteUserFromDb = async (id: number) => {
   const deleteUser = await pool.query(`DELETE FROM users WHERE id = $1`, [id])
-
+  if (deleteUser.rowCount === 0) {
+    return {
+      success: false,
+      message: 'User not found',
+      error: 'User not found'
+    }
+  }
+  if (deleteUser.rowCount === 1) {
+    const todo = await pool.query(`DELETE FROM todos WHERE user_id = $1`, [id])
+    return todo
+  }
   return deleteUser
 }
 
