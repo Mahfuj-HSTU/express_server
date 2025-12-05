@@ -7,11 +7,22 @@ const createTodoIntoDb = async (
   is_completed: boolean,
   due_date: string
 ) => {
-  const result = await pool.query(
-    `INSERT INTO todos (user_id, title, description, is_completed, due_date) VALUES ($1, $2, $3, $4, $5)`,
-    [user_id, title, description, is_completed, due_date]
-  )
-  return result
+  const isUserExist = await pool.query(`SELECT * FROM users WHERE id = $1`, [
+    user_id
+  ])
+  if (isUserExist.rows.length === 0) {
+    return {
+      success: false,
+      message: 'User not found',
+      error: 'User not found'
+    }
+  } else {
+    const result = await pool.query(
+      `INSERT INTO todos (user_id, title, description, is_completed, due_date) VALUES ($1, $2, $3, $4, $5)`,
+      [user_id, title, description, is_completed, due_date]
+    )
+    return result
+  }
 }
 
 const getAllTodosFromDb = async () => {
@@ -32,6 +43,16 @@ const updateTodoIntoDb = async (
   is_completed: boolean,
   due_date: string
 ) => {
+  const isUserExist = await pool.query(`SELECT * FROM users WHERE id = $1`, [
+    user_id
+  ])
+  if (isUserExist.rows.length === 0) {
+    return {
+      success: false,
+      message: 'User not found',
+      error: 'User not found'
+    }
+  }
   const result = await pool.query(
     `UPDATE todos SET user_id = $1, title = $2, description = $3, is_completed = $4, due_date = $5 WHERE id = $6`,
     [user_id, title, description, is_completed, due_date, id]

@@ -12,11 +12,17 @@ const createTodo = async (req: Request, res: Response) => {
       is_completed,
       due_date
     )
-    res.send({
-      success: true,
-      message: 'Todo created successfully',
-      data: result.rows[0]
-    })
+
+    // Handle "user not found"
+    if ('success' in result) {
+      return res.status(404).send(result)
+    } else {
+      res.send({
+        success: true,
+        message: 'Todo created successfully',
+        data: result.rows[0]
+      })
+    }
   } catch (error: any) {
     res.status(500).send({
       success: false,
@@ -81,6 +87,11 @@ const updateTodo = async (req: Request, res: Response) => {
       is_completed,
       due_date
     )
+
+    if ('success' in result) {
+      return res.status(404).send(result)
+    }
+
     res.send({
       success: true,
       message: 'Todo updated successfully',
