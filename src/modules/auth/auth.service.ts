@@ -1,6 +1,7 @@
 import { pool } from '../../config/db'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import config from '../../config'
 
 const loginUser = async (email: string, password: string) => {
   const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [
@@ -25,12 +26,11 @@ const loginUser = async (email: string, password: string) => {
 
   const token = jwt.sign(
     { name: user.name, email: user.email },
-    process.env.JWT_SECRET as string,
+    config.jwt_secret as string,
     {
-      expiresIn: '1h'
+      expiresIn: '7d'
     }
   )
-  console.log(token)
   return { user, token }
 }
 

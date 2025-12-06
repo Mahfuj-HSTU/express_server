@@ -2,13 +2,13 @@ import { pool } from '../../config/db'
 import bcrypt from 'bcryptjs'
 
 const createUserIntoDb = async (payload: Record<string, unknown>) => {
-  const { name, email, age, password } = payload
+  const { name, role, email, age, password } = payload
 
   const hashedPassword = await bcrypt.hash(password as string, 10)
 
   const result = await pool.query(
-    `INSERT INTO users(name, email, age, password) VALUES($1, $2, $3, $4) RETURNING *`,
-    [name, email, age, hashedPassword]
+    `INSERT INTO users(name, role, email, age, password) VALUES($1, $2, $3, $4, $5) RETURNING *`,
+    [name, role, email, age, hashedPassword]
   )
   return result
 }
